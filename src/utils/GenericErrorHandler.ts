@@ -1,4 +1,4 @@
-export class ErrorHandler extends Error {
+export class GenericErrorHandler extends Error {
   public name: string;
   public statusCode: number;
 
