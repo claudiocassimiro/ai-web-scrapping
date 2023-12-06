@@ -1,15 +1,7 @@
-import express from "express";
-import { Request, Response } from "express";
-import errorHandler from "./middleware/errorHandler";
+import app from "./app";
 
-const app = express();
+const PORT = process.env.PORT || 3000;
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Application works!");
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });
-
-app.listen(3000, () => {
-  console.log("Application started on port 3000!");
-});
-
-app.use(errorHandler);
