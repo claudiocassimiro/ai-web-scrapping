@@ -1,5 +1,6 @@
 import express from "express";
 import { Request, Response } from "express";
+import errorHandler from "./middleware/errorHandler";
 
 const app = express();
 
@@ -10,3 +11,5 @@ app.get("/", (req: Request, res: Response) => {
 app.listen(3000, () => {
   console.log("Application started on port 3000!");
 });
+
+app.use(errorHandler);
