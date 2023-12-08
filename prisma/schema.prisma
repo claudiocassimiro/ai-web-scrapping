@@ -47,17 +47,18 @@ model RelatedQuestions {
 }
 
 model InlineVideos {
-  id         String       @id @default(cuid())
-  position   Int?
-  title      String?
-  link       String?
-  thumbnail  String?
-  channel    String?
-  duration   String?
-  platform   String?
-  date       String?
-  document   Document @relation(fields: [documentId], references: [id])
-  documentId String
+  id          String       @id @default(cuid())
+  position    Int?
+  title       String?
+  link        String?
+  thumbnail   String?
+  channel     String?
+  duration    String?
+  platform    String?
+  date        String?
+  document    Document @relation(fields: [documentId], references: [id])
+  documentId  String
+  key_moments String?
 }
 
 model InlineImages {
