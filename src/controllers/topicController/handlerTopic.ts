@@ -4,6 +4,7 @@ import {
   topicSchemaValidation,
   TopicType,
 } from "../../utils/validations/topicRouteValidation";
+import handlerTopicService from "../../services/topicService/handlerTopicService";
 
 const topic = async (req: Request, res: Response) => {
   const { topic, tags, TagsToAvoid, typeOfSearch, typeOfReport } =
@@ -13,8 +14,8 @@ const topic = async (req: Request, res: Response) => {
     topic,
     tags,
     TagsToAvoid,
-    typeOfSearch, // tipo da busca (Urgente) ou (Pesquisa específica) por padrão será Urgente
-    typeOfReport, // tipo do relatório
+    typeOfSearch,
+    typeOfReport,
   });
 
   if (!dataIsValid) {
@@ -25,9 +26,15 @@ const topic = async (req: Request, res: Response) => {
     );
   }
 
-  // preciso utilizar os dados recebidos pela API para fazer a busca na web com IA
-  // Vou precisar criar uma serie de prompts e chains auxiliar na construção das respostas
-  return res.status(200).json({ message: "Hello World" });
+  const message = await handlerTopicService({
+    topic,
+    tags,
+    TagsToAvoid,
+    typeOfSearch,
+    typeOfReport,
+  });
+
+  return res.status(200).json({ message });
 };
 
 const topicController = {

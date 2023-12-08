@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Document {
+  id               String                 @id @default(cuid())
+  content          String?
+  media            String?
+  date             DateTime?
+  relatedTags      RelatedTags[]
+  relatedQuestions RelatedQuestions[]
+  inlineVideos     InlineVideos[]
+  inlineImages     InlineImages[]
+  moreInfo         MoreInfo[]
+  link             String?
+  vector           Unsupported("vector")?
+}
+
+model MoreInfo {
+  id          String         @id @default(cuid())
+  author      String?
+  feeling     String?
+  group       String?
+  document    Document @relation(fields: [documentId], references: [id])
+  documentId  String
+}
+
+model Topics {
+  id     String    @id @default(cuid())
+  topic  String
+}
+
+model RelatedTags {
+  id          String   @id @default(cuid())
+  tag         String?
+  document    Document @relation(fields: [documentId], references: [id])
+  documentId  String
+}
+
+model RelatedQuestions {
+  id              String   @id @default(cuid())
+  question        String?
+  snippet         String?
+  title           String?
+  date            String?
+  link            String?
+  displayed_link  String?
+  thumbnail       String?
+  source_logo     String?
+  next_page_token String?
+  serpapi_link    String?
+  document        Document @relation(fields: [documentId], references: [id])
+  documentId      String
+}
+
+model InlineVideos {
+  id          String       @id @default(cuid())
+  position    Int?
+  title       String?
+  link        String?
+  thumbnail   String?
+  channel     String?
+  duration    String?
+  platform    String?
+  date        String?
+  document    Document @relation(fields: [documentId], references: [id])
+  documentId  String
+  key_moments String?
+}
+
+model InlineImages {
+  id          String       @id @default(cuid())
+  source      String?
+  thumbnail   String?
+  original    String?
+  title       String?
+  source_name String?
+  link        String?
+  document    Document @relation(fields: [documentId], references: [id])
+  documentId  String
+}
