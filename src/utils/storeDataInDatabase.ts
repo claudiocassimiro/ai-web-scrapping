@@ -6,6 +6,7 @@ import { Document } from "langchain/dist/document";
 
 export const storeDataInDatabase = async (
   splitedDocs: Document<Record<string, any>>[],
+  topic: string,
 ) => {
   const vectorStore = PrismaVectorStore.withModel<PrismaDocument>(
     prisma,
@@ -45,4 +46,10 @@ export const storeDataInDatabase = async (
       ),
     ),
   );
+
+  await prisma.topics.create({
+    data: {
+      topic,
+    },
+  });
 };
