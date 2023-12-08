@@ -23,6 +23,11 @@ model Document {
   vector           Unsupported("vector")?
 }
 
+model Topics {
+  id     String    @id @default(cuid())
+  topic  String
+}
+
 model RelatedTags {
   id          String   @id @default(cuid())
   tag         String?
