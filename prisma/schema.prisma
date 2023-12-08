@@ -19,8 +19,18 @@ model Document {
   relatedQuestions RelatedQuestions[]
   inlineVideos     InlineVideos[]
   inlineImages     InlineImages[]
+  moreInfo         MoreInfo[]
   link             String?
   vector           Unsupported("vector")?
+}
+
+model MoreInfo {
+  id          String         @id @default(cuid())
+  author      String?
+  feeling     String?
+  group       String?
+  document    Document @relation(fields: [documentId], references: [id])
+  documentId  String
 }
 
 model Topics {
