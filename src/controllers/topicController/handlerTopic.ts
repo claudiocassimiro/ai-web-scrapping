@@ -14,8 +14,8 @@ const topic = async (req: Request, res: Response) => {
     topic,
     tags,
     TagsToAvoid,
-    typeOfSearch, // tipo da busca (Urgente) ou (Pesquisa específica) por padrão será Urgente
-    typeOfReport, // tipo do relatório
+    typeOfSearch,
+    typeOfReport,
   });
 
   if (!dataIsValid) {
@@ -26,7 +26,7 @@ const topic = async (req: Request, res: Response) => {
     );
   }
 
-  await handlerTopicService({
+  const message = await handlerTopicService({
     topic,
     tags,
     TagsToAvoid,
@@ -34,9 +34,7 @@ const topic = async (req: Request, res: Response) => {
     typeOfReport,
   });
 
-  // preciso utilizar os dados recebidos pela API para fazer a busca na web com IA
-  // Vou precisar criar uma serie de prompts e chains auxiliar na construção das respostas
-  return res.status(200).json({ message: "Hello World" });
+  return res.status(200).json({ message });
 };
 
 const topicController = {
