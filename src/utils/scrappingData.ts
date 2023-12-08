@@ -36,16 +36,18 @@ export const scrappingData = async (
     metadata: {
       media: result.link,
       date: new Date(),
-      relatedTags: tags.map((tag) => ({ tag: tag })),
-      relatedQuestions: related_questions.map((question: any) => ({
-        ...question,
-        date: question.date || "",
-      })),
+      relatedTags: tags?.map((tag) => ({ tag: tag })),
+      relatedQuestions:
+        related_questions?.map((question: any) => ({
+          ...question,
+          date: question.date || "",
+        })) || [],
       link: result.link,
-      inlineVideos: inline_videos.map((video: any) => ({
-        ...video,
-        key_moments: JSON.stringify(video.key_moments) || "",
-      })),
+      inlineVideos:
+        inline_videos?.map((video: any) => ({
+          ...video,
+          key_moments: JSON.stringify(video.key_moments) || "",
+        })) || [],
       inlineImages: inline_images,
     },
   })) as Document<Record<string, any>>[];
