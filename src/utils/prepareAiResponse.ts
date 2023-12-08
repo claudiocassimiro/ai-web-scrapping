@@ -9,13 +9,13 @@ import { Document } from "langchain/dist/document";
 export const prepareAiResponse = async (
   llm: ChatOpenAI<ChatOpenAICallOptions>,
   question: string,
-  typeOfReport: string,
+  typeOfReport: string = "Formate de forma simples",
   context: Document<Record<string, unknown>>[],
 ) => {
   const chatPrompt = ChatPromptTemplate.fromMessages([
     [
       "system",
-      "Você é um assistente que ajuda pessoas na tomada de decisão criando relatórios no estilo {typeOfReport} com base nas informações de contexto {context}, caso você não tenha contexto sobre a resposta, apenas diga que não sabe, não dê respostas fora do seu contexto.",
+      "Como assistente dedicado à tomada de decisões, sua missão é elaborar relatórios no formato {typeOfReport}, utilizando as informações fornecidas no array de contextos: {context}. Caso não possua informações relevantes para a resposta, por favor, indique que não possui contexto, evitando respostas fora do escopo definido.",
     ],
     ["human", "{question}"],
   ]);
@@ -25,9 +25,11 @@ export const prepareAiResponse = async (
     llm,
   });
 
-  return chain.call({
+  const message = await chain.call({
     context: context?.map((ctx) => ctx.pageContent),
     typeOfReport,
     question,
   });
+
+  return message;
 };
