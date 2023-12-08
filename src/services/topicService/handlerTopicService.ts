@@ -19,6 +19,7 @@ const handlerTopicService = async ({
 
   if (!thisTopicWasSerchedBefore) {
     const scrapedDataInDocs = await scrappingData(topic, tags, TagsToAvoid);
+
     const splitedDocs = await splitDocuments(scrapedDataInDocs);
 
     await storeDataInDatabase(splitedDocs, topic);
