@@ -12,32 +12,62 @@ datasource db {
 
 model Document {
   id               String                 @id @default(cuid())
-  content          String
-  media            String
-  data             DateTime
+  content          String?
+  media            String?
+  date             DateTime?
   relatedTags      RelatedTags[]
   relatedQuestions RelatedQuestions[]
-  link             String
+  inlineVideos     InlineVideos[]
+  inlineImages     InlineImages[]
+  link             String?
   vector           Unsupported("vector")?
 }
 
 model RelatedTags {
   id          String   @id @default(cuid())
-  tag         String
+  tag         String?
   document    Document @relation(fields: [documentId], references: [id])
   documentId  String
 }
 
 model RelatedQuestions {
   id              String   @id @default(cuid())
-  question        String
-  snippet         String
-  title           String
-  link            String
-  displayedLink   String
-  thumbnail       String
-  next_page_token String
-  serpapi_link    String
+  question        String?
+  snippet         String?
+  title           String?
+  date            String?
+  link            String?
+  displayed_link  String?
+  thumbnail       String?
+  source_logo     String?
+  next_page_token String?
+  serpapi_link    String?
   document        Document @relation(fields: [documentId], references: [id])
   documentId      String
+}
+
+model InlineVideos {
+  id         String       @id @default(cuid())
+  position   Int?
+  title      String?
+  link       String?
+  thumbnail  String?
+  channel    String?
+  duration   String?
+  platform   String?
+  date       String?
+  document   Document @relation(fields: [documentId], references: [id])
+  documentId String
+}
+
+model InlineImages {
+  id          String       @id @default(cuid())
+  source      String?
+  thumbnail   String?
+  original    String?
+  title       String?
+  source_name String?
+  link        String?
+  document    Document @relation(fields: [documentId], references: [id])
+  documentId  String
 }
