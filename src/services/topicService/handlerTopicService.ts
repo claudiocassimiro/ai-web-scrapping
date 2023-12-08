@@ -5,6 +5,7 @@ import { splitDocuments } from "../../utils/splitDocuments";
 import { initializeChatOpenAI } from "../../utils/initializeChatOpenAI";
 import { storeDataInDatabase } from "../../utils/storeDataInDatabase";
 import { searchDataInDatabase } from "../../utils/searchDataInDatabase";
+import { searchTopicInDatabase } from "../../utils/searchTopicInDatabase";
 
 const handlerTopicService = async ({
   topic,
@@ -14,27 +15,22 @@ const handlerTopicService = async ({
   typeOfReport,
 }: TopicType) => {
   const llm = initializeChatOpenAI();
-  const validateIfHasContext = await searchDataInDatabase(
-    llm,
-    typeOfReport,
-    topic,
-  );
+  const thisTopicWasSerchedBefore = await searchTopicInDatabase(topic);
 
-  if (
-    typeof validateIfHasContext === "string" ||
-    validateIfHasContext.text.includes("Desculpe, mas não tenho informações")
-  ) {
+  if (!thisTopicWasSerchedBefore) {
     const scrapedDataInDocs = await scrappingData(topic, tags, TagsToAvoid);
     const splitedDocs = await splitDocuments(scrapedDataInDocs);
 
-    await storeDataInDatabase(splitedDocs);
+    await storeDataInDatabase(splitedDocs, topic);
 
     const message = await searchDataInDatabase(llm, typeOfReport, topic);
 
     return message;
   }
 
-  return validateIfHasContext;
+  const message = await searchDataInDatabase(llm, typeOfReport, topic);
+
+  return message;
 };
 
 export default handlerTopicService;
