@@ -42,7 +42,10 @@ export const scrappingData = async (
         date: question.date || "",
       })),
       link: result.link,
-      inlineVideos: inline_videos,
+      inlineVideos: inline_videos.map((video: any) => ({
+        ...video,
+        key_moments: JSON.stringify(video.key_moments) || "",
+      })),
       inlineImages: inline_images,
     },
   })) as Document<Record<string, any>>[];
