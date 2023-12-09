@@ -25,7 +25,7 @@ export const searchDataInDatabase = async (
     },
   });
 
-  const question = `Preciso de mais informações, formatadas em formato de ${typeOfReport} sobre ${topic}`;
+  const question = `Escreva um relatório sobre ${topic} utilize contextos relacionados para isso.`;
 
   const documents = await vectorStore.similaritySearch(question, 10);
 

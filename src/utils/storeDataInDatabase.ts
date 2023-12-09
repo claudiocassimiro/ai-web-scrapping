@@ -51,7 +51,7 @@ export const storeDataInDatabase = async (
       .replace(/}\n{/g, "},{")
       .replace(/\n/g, "");
 
-    const javaScriptObj = JSON.parse(`${fixedJsonString}`);
+    const javascriptObj = JSON.parse(`[${fixedJsonString}]`);
 
     const vectorStore = PrismaVectorStore.withModel<PrismaDocument>(
       prisma,
@@ -65,11 +65,18 @@ export const storeDataInDatabase = async (
       },
     });
 
+    const { id } = await prisma.topics.create({
+      data: {
+        topic,
+      },
+    });
+
     await vectorStore.addModels(
       await prisma.$transaction(
         splitedDocs.map((content) =>
           prisma.document.create({
             data: {
+              topicId: id,
               content: content.pageContent,
               media: content.metadata.media,
               date: content.metadata.data,
@@ -78,7 +85,7 @@ export const storeDataInDatabase = async (
                 create: content.metadata.relatedTags,
               },
               moreInfo: {
-                create: javaScriptObj?.documents?.map((document: MoreInfo) => ({
+                create: javascriptObj?.map((document: MoreInfo) => ({
                   author: document.author,
                   feeling: document.feeling,
                   group: document.group,
@@ -111,12 +118,6 @@ export const storeDataInDatabase = async (
         ),
       ),
     );
-
-    return prisma.topics.create({
-      data: {
-        topic,
-      },
-    });
   } catch (error: any) {
     throw new GenericErrorHandler(
       error.message || "Problem when save the data",

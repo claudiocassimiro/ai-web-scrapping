@@ -6,6 +6,7 @@ import { initializeChatOpenAI } from "../../utils/initializeChatOpenAI";
 import { storeDataInDatabase } from "../../utils/storeDataInDatabase";
 import { searchDataInDatabase } from "../../utils/searchDataInDatabase";
 import { searchTopicInDatabase } from "../../utils/searchTopicInDatabase";
+import { GenericErrorHandler } from "../../utils/GenericErrorHandler";
 
 const handlerTopicService = async ({
   topic,
@@ -15,23 +16,31 @@ const handlerTopicService = async ({
   typeOfReport,
 }: TopicType) => {
   const llm = initializeChatOpenAI();
-  const thisTopicWasSerchedBefore = await searchTopicInDatabase(topic);
+  try {
+    const thisTopicWasSerchedBefore = await searchTopicInDatabase(topic);
 
-  if (!thisTopicWasSerchedBefore) {
-    const scrapedDataInDocs = await scrappingData(topic, tags, TagsToAvoid);
+    if (!thisTopicWasSerchedBefore) {
+      const scrapedDataInDocs = await scrappingData(topic, tags, TagsToAvoid);
 
-    const splitedDocs = await splitDocuments(scrapedDataInDocs);
+      const splitedDocs = await splitDocuments(scrapedDataInDocs);
 
-    await storeDataInDatabase(splitedDocs, topic);
+      await storeDataInDatabase(splitedDocs, topic);
+
+      const message = await searchDataInDatabase(llm, typeOfReport, topic);
+
+      return message;
+    }
 
     const message = await searchDataInDatabase(llm, typeOfReport, topic);
 
     return message;
+  } catch (error: any) {
+    throw new GenericErrorHandler(
+      error.message || "Problem when handler the topic",
+      500,
+      "Internal error",
+    );
   }
-
-  const message = await searchDataInDatabase(llm, typeOfReport, topic);
-
-  return message;
 };
 
 export default handlerTopicService;
