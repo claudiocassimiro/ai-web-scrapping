@@ -21,6 +21,8 @@ model Document {
   inlineImages     InlineImages[]
   moreInfo         MoreInfo[]
   link             String?
+  topic            Topics                 @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId          String
   vector           Unsupported("vector")?
 }
 
@@ -29,19 +31,20 @@ model MoreInfo {
   author      String?
   feeling     String?
   group       String?
-  document    Document @relation(fields: [documentId], references: [id])
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
   documentId  String
 }
 
 model Topics {
-  id     String    @id @default(cuid())
-  topic  String
+  id        String    @id @default(cuid())
+  topic     String
+  document  Document[]
 }
 
 model RelatedTags {
   id          String   @id @default(cuid())
   tag         String?
-  document    Document @relation(fields: [documentId], references: [id])
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
   documentId  String
 }
 
@@ -57,7 +60,7 @@ model RelatedQuestions {
   source_logo     String?
   next_page_token String?
   serpapi_link    String?
-  document        Document @relation(fields: [documentId], references: [id])
+  document        Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
   documentId      String
 }
 
@@ -71,7 +74,7 @@ model InlineVideos {
   duration    String?
   platform    String?
   date        String?
-  document    Document @relation(fields: [documentId], references: [id])
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
   documentId  String
   key_moments String?
 }
@@ -84,6 +87,6 @@ model InlineImages {
   title       String?
   source_name String?
   link        String?
-  document    Document @relation(fields: [documentId], references: [id])
+  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
   documentId  String
 }
