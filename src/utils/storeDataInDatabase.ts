@@ -65,54 +65,82 @@ export const storeDataInDatabase = async (
       },
     });
 
-    const { id } = await prisma.topics.create({
-      data: {
-        topic,
-      },
-    });
+    const [createdTopic] = await prisma.$transaction([
+      prisma.topics.create({
+        data: {
+          topic,
+          relatedTags: {
+            create: splitedDocs
+              .flatMap((content) => content.metadata.relatedTags)
+              .map((relatedTag) => ({ tag: relatedTag.tag })),
+          },
+          moreInfo: {
+            create: javascriptObj?.map(
+              (document: MoreInfo) =>
+                ({
+                  author: document.author,
+                  feeling: document.feeling,
+                  group: document.group,
+                }) || [],
+            ),
+          },
+          relatedQuestions: {
+            create: splitedDocs
+              .flatMap((content) => content.metadata.relatedQuestions)
+              .map((quest: RelatedQuestions) => ({
+                question: quest.question,
+                snippet: quest.snippet,
+                title: quest.title,
+                date: quest.date,
+                link: quest.link,
+                displayed_link: quest.displayed_link,
+                thumbnail: quest.thumbnail,
+                source_logo: quest.source_logo,
+                next_page_token: quest.next_page_token,
+                serpapi_link: quest.serpapi_link,
+              })),
+          },
+          inlineVideos: {
+            create: splitedDocs
+              .flatMap((content) => content.metadata.inlineVideos)
+              .map((video) => ({
+                position: video.position,
+                title: video.title,
+                link: video.link,
+                thumbnail: video.thumbnail,
+                channel: video.channel,
+                duration: video.duration,
+                platform: video.platform,
+                data: video.data,
+                key_moments: video.key_moments,
+              })),
+          },
+          inlineImages: {
+            create: splitedDocs
+              .flatMap((content) => content.metadata.inlineImages)
+              .map((image) => ({
+                source: image?.source || null,
+                thumbnail: image?.thumbnail || null,
+                original: image?.original || null,
+                title: image?.title || null,
+                source_name: image?.source_name || null,
+                link: image?.link || null,
+              })),
+          },
+        },
+      }),
+    ]);
 
     await vectorStore.addModels(
       await prisma.$transaction(
-        splitedDocs.map((content) =>
+        splitedDocs?.map((content) =>
           prisma.document.create({
             data: {
-              topicId: id,
+              topicId: createdTopic.id,
               content: content.pageContent,
               media: content.metadata.media,
               date: content.metadata.data,
               link: content.metadata.link,
-              relatedTags: {
-                create: content.metadata.relatedTags,
-              },
-              moreInfo: {
-                create: javascriptObj?.map((document: MoreInfo) => ({
-                  author: document.author,
-                  feeling: document.feeling,
-                  group: document.group,
-                })),
-              },
-              relatedQuestions: {
-                create: content.metadata.relatedQuestions.map(
-                  (quest: RelatedQuestions) => ({
-                    question: quest.question,
-                    snippet: quest.snippet,
-                    title: quest.title,
-                    date: quest.date,
-                    link: quest.link,
-                    displayed_link: quest.displayed_link,
-                    thumbnail: quest.thumbnail,
-                    source_logo: quest.source_logo,
-                    next_page_token: quest.next_page_token,
-                    serpapi_link: quest.serpapi_link,
-                  }),
-                ),
-              },
-              inlineVideos: {
-                create: content.metadata.inlineVideos,
-              },
-              inlineImages: {
-                create: content.metadata.inlineImages,
-              },
             },
           }),
         ),
