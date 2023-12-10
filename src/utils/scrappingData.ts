@@ -1,3 +1,4 @@
+import { InlineVideos, RelatedQuestions } from "@prisma/client";
 import { Document } from "langchain/dist/document";
 import { getJson } from "serpapi";
 
@@ -38,13 +39,13 @@ export const scrappingData = async (
       date: new Date(),
       relatedTags: tags?.map((tag) => ({ tag: tag })),
       relatedQuestions:
-        related_questions?.map((question: any) => ({
+        related_questions?.map((question: RelatedQuestions) => ({
           ...question,
           date: question.date || "",
         })) || [],
       link: result.link,
       inlineVideos:
-        inline_videos?.map((video: any) => ({
+        inline_videos?.map((video: InlineVideos) => ({
           ...video,
           key_moments: JSON.stringify(video.key_moments) || "",
         })) || [],
