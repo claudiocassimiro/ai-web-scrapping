@@ -1,4 +1,4 @@
-import prisma from "../lib/prisma";
+import prisma from "../../lib/prisma";
 import { PrismaVectorStore } from "langchain/vectorstores/prisma";
 import {
   MoreInfo,
@@ -8,14 +8,15 @@ import {
 } from "@prisma/client";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { Document } from "langchain/dist/document";
-import { initializeChatOpenAI } from "./initializeChatOpenAI";
+import { initializeChatOpenAI } from "../../utils/aiTools/initializeChatOpenAI";
 import { ChatPromptTemplate } from "langchain/prompts";
 import { LLMChain } from "langchain/chains";
-import { GenericErrorHandler } from "./GenericErrorHandler";
+import { GenericErrorHandler } from "../../utils/errors/GenericErrorHandler";
 
-export const storeDataInDatabase = async (
+export const storeDataRepo = async (
   splitedDocs: Document<Record<string, any>>[],
   topic: string,
+  email: string,
 ) => {
   try {
     const llm = initializeChatOpenAI();
@@ -65,10 +66,15 @@ export const storeDataInDatabase = async (
       },
     });
 
+    const user = await prisma.user.findUnique({ where: { email } });
+
+    if (!user) return null;
+
     const [createdTopic] = await prisma.$transaction([
       prisma.topics.create({
         data: {
           topic,
+          userId: user.id,
           relatedTags: {
             create: splitedDocs
               .flatMap((content) => content.metadata.relatedTags)
