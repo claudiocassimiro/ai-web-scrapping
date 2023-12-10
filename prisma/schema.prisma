@@ -15,11 +15,6 @@ model Document {
   content          String?
   media            String?
   date             DateTime?
-  relatedTags      RelatedTags[]
-  relatedQuestions RelatedQuestions[]
-  inlineVideos     InlineVideos[]
-  inlineImages     InlineImages[]
-  moreInfo         MoreInfo[]
   link             String?
   topic            Topics                 @relation(fields: [topicId], references: [id], onDelete: Cascade)
   topicId          String
@@ -31,21 +26,26 @@ model MoreInfo {
   author      String?
   feeling     String?
   group       String?
-  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  documentId  String
+  topic       Topics       @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId     String
 }
 
 model Topics {
   id        String    @id @default(cuid())
   topic     String
+  relatedTags      RelatedTags[]
+  relatedQuestions RelatedQuestions[]
+  inlineVideos     InlineVideos[]
+  inlineImages     InlineImages[]
+  moreInfo         MoreInfo[]
   document  Document[]
 }
 
 model RelatedTags {
   id          String   @id @default(cuid())
   tag         String?
-  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  documentId  String
+  topic       Topics       @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId     String
 }
 
 model RelatedQuestions {
@@ -60,8 +60,8 @@ model RelatedQuestions {
   source_logo     String?
   next_page_token String?
   serpapi_link    String?
-  document        Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  documentId      String
+  topic           Topics   @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId         String
 }
 
 model InlineVideos {
@@ -74,9 +74,9 @@ model InlineVideos {
   duration    String?
   platform    String?
   date        String?
-  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  documentId  String
   key_moments String?
+  topic       Topics       @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId     String
 }
 
 model InlineImages {
@@ -87,6 +87,6 @@ model InlineImages {
   title       String?
   source_name String?
   link        String?
-  document    Document @relation(fields: [documentId], references: [id], onDelete: Cascade)
-  documentId  String
+  topic       Topics       @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId     String
 }
