@@ -1,5 +1,5 @@
 import { PrismaVectorStore } from "langchain/vectorstores/prisma";
-import prisma from "../lib/prisma";
+import prisma from "../../lib/prisma";
 import { Prisma } from "@prisma/client";
 
 import {
@@ -7,9 +7,9 @@ import {
   ChatOpenAICallOptions,
 } from "langchain/chat_models/openai";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
-import { prepareAiResponse } from "./prepareAiResponse";
+import { prepareAiResponse } from "../../utils/aiTools/prepareAiResponse";
 
-export const searchDataInDatabase = async (
+export const searchContextRepo = async (
   llm: ChatOpenAI<ChatOpenAICallOptions>,
   typeOfReport: string = "relatório",
   topic: string,
@@ -25,7 +25,7 @@ export const searchDataInDatabase = async (
     },
   });
 
-  const question = `Escreva um relatório sobre ${topic} utilize contextos relacionados para isso.`;
+  const question = `Escreva um relatório sobre ${topic} faça uma análise e utilize os contextos relacionados para isso.`;
 
   const documents = await vectorStore.similaritySearch(question, 10);
 

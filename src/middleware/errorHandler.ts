@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { GenericErrorHandler } from "../utils/GenericErrorHandler";
+import { GenericErrorHandler } from "../utils/errors/GenericErrorHandler";
 
 const errorHandler = (
   error: GenericErrorHandler,
