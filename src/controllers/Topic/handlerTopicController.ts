@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { GenericErrorHandler } from "../../utils/GenericErrorHandler";
+import { GenericErrorHandler } from "../../utils/errors/GenericErrorHandler";
 import {
   topicSchemaValidation,
   TopicType,
@@ -27,6 +27,7 @@ const topic = async (req: Request, res: Response) => {
   }
 
   const message = await handlerTopicService({
+    email: req.email?.email,
     topic,
     tags,
     TagsToAvoid,
