@@ -8,7 +8,7 @@
     "lint": "eslint . --ext .ts",
     "dev": "./node_modules/nodemon/bin/nodemon.js",
     "start": "ts-node ./src/server.ts",
-    "start:prod": "npm run build && node ./dist/src/server.js",
+    "start:prod": "npm run build && node ./dist/server.js",
     "build": "npx tsc"
   },
   "keywords": [
