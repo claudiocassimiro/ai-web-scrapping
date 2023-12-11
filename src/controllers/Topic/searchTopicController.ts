@@ -6,7 +6,7 @@ import {
 } from "../../utils/validations/topicRouteValidation";
 import handlerTopicService from "../../services/topicService/handlerTopicService";
 
-const topic = async (req: Request, res: Response) => {
+export const searchTopicController = async (req: Request, res: Response) => {
   const { topic, tags, TagsToAvoid, typeOfSearch, typeOfReport } =
     req.body as TopicType;
 
@@ -37,9 +37,3 @@ const topic = async (req: Request, res: Response) => {
 
   return res.status(200).json({ message });
 };
-
-const topicController = {
-  topic,
-};
-
-export default topicController;
