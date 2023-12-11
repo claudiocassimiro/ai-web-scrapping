@@ -26,7 +26,7 @@ export const scrappingData = async (
     hl: "pt-br",
     safe: "active",
     device: "mobile",
-    num: "10",
+    num: "13",
   });
 
   const { related_questions, inline_videos, inline_images, organic_results } =
