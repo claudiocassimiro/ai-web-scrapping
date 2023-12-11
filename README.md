@@ -4,6 +4,27 @@
 
 The **ai-web-scrapping** project is an advanced web scraping application integrated with artificial intelligence capabilities. The primary purpose of this app is to intelligently collect data about a specified piece of information from various online sources. The application utilizes AI algorithms to enhance the efficiency and accuracy of the web scraping process.
 
+## How to run the application
+
+First, you must install the dependencies with `npm i`.
+Now, you have to create your `.env` for this, copy the `.env.example`
+in your `.env` and fill in the envs.
+
+```bash
+  OPENAI_API_KEY="YOUR OPENAI_API_KEY"
+  OPENAI_API_URL="YOUR OPENAI_API_URL"
+  SERP_API_KEY="YOUR SERP_API_KEY" Access the https://serpapi.com/ to get your SERP_API_KEY
+  DATABASE_URL="YOUR DATABASE_URL"
+  DB_USER="YOUR DB_USER"
+  DB_PASSWORD="YOUR DB_PASSWORD"
+  ACCESS_TOKEN_SECRET="YOUR ACCESS_TOKEN_SECRET"
+```
+
+Now, you must run `docker compose -d` to upload the database container.
+Then you have to run `npx prisma generate` and `npx prisma Migrate deploy`.
+
+Now, you can run `npm run dev` to run the development server and make requests.
+
 ## Features
 
 - **AI Integration:** Leverage the power of artificial intelligence to intelligently extract relevant data.
