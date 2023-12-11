@@ -5,7 +5,7 @@ import { getJson } from "serpapi";
 export const scrappingData = async (
   topic: string,
   tags: string[] = [],
-  TagsToAvoid: string[] = [],
+  tagsToAvoid: string[] = [],
 ) => {
   let query = topic;
 
@@ -13,8 +13,8 @@ export const scrappingData = async (
     query += ` ${tags.map((tag) => `AND ${tag}`).join(" ")}`;
   }
 
-  if (TagsToAvoid.length > 0) {
-    query += ` ${TagsToAvoid.map((tag) => `-${tag}`).join(" ")}`;
+  if (tagsToAvoid.length > 0) {
+    query += ` ${tagsToAvoid.map((tag) => `-${tag}`).join(" ")}`;
   }
 
   const results = await getJson({
@@ -26,7 +26,7 @@ export const scrappingData = async (
     hl: "pt-br",
     safe: "active",
     device: "mobile",
-    num: "13",
+    num: "10",
   });
 
   const { related_questions, inline_videos, inline_images, organic_results } =

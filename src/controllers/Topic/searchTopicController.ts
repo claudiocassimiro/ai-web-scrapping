@@ -7,13 +7,13 @@ import {
 import handlerTopicService from "../../services/topicService/handlerTopicService";
 
 export const searchTopicController = async (req: Request, res: Response) => {
-  const { topic, tags, TagsToAvoid, typeOfSearch, typeOfReport } =
+  const { topic, tags, tagsToAvoid, typeOfSearch, typeOfReport } =
     req.body as TopicType;
 
   const dataIsValid = topicSchemaValidation({
     topic,
     tags,
-    TagsToAvoid,
+    tagsToAvoid,
     typeOfSearch,
     typeOfReport,
   });
@@ -30,7 +30,7 @@ export const searchTopicController = async (req: Request, res: Response) => {
     email: req.email?.email,
     topic,
     tags,
-    TagsToAvoid,
+    tagsToAvoid,
     typeOfSearch,
     typeOfReport,
   });
