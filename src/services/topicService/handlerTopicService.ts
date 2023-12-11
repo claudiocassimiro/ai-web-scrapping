@@ -11,7 +11,7 @@ import { GenericErrorHandler } from "../../utils/errors/GenericErrorHandler";
 const handlerTopicService = async ({
   topic,
   tags,
-  TagsToAvoid,
+  tagsToAvoid,
   typeOfSearch,
   typeOfReport,
   email,
@@ -21,7 +21,7 @@ const handlerTopicService = async ({
     const thisTopicWasSerchedBefore = await searchTopicRepo(topic);
 
     if (!thisTopicWasSerchedBefore) {
-      const scrapedDataInDocs = await scrappingData(topic, tags, TagsToAvoid);
+      const scrapedDataInDocs = await scrappingData(topic, tags, tagsToAvoid);
 
       const splitedDocs = await splitDocuments(scrapedDataInDocs);
 

@@ -6,14 +6,14 @@ import {
 } from "../../utils/validations/topicRouteValidation";
 import handlerTopicService from "../../services/topicService/handlerTopicService";
 
-const topic = async (req: Request, res: Response) => {
-  const { topic, tags, TagsToAvoid, typeOfSearch, typeOfReport } =
+export const searchTopicController = async (req: Request, res: Response) => {
+  const { topic, tags, tagsToAvoid, typeOfSearch, typeOfReport } =
     req.body as TopicType;
 
   const dataIsValid = topicSchemaValidation({
     topic,
     tags,
-    TagsToAvoid,
+    tagsToAvoid,
     typeOfSearch,
     typeOfReport,
   });
@@ -30,16 +30,10 @@ const topic = async (req: Request, res: Response) => {
     email: req.email?.email,
     topic,
     tags,
-    TagsToAvoid,
+    tagsToAvoid,
     typeOfSearch,
     typeOfReport,
   });
 
   return res.status(200).json({ message });
 };
-
-const topicController = {
-  topic,
-};
-
-export default topicController;

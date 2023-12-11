@@ -8,8 +8,7 @@ export const getSingleUserController = async (req: Request, res: Response) => {
     const getSingleUser = await getSingleUserRepo(id);
 
     if (!getSingleUser) {
-      res.status(404).send("No found User");
-      return;
+      return res.status(404).send("Not found User");
     }
 
     res.status(200).json({
