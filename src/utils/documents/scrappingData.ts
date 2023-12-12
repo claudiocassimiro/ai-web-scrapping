@@ -2,11 +2,17 @@ import { InlineVideos, RelatedQuestions } from "@prisma/client";
 import { Document } from "langchain/dist/document";
 import { getJson } from "serpapi";
 
-export const scrappingData = async (
-  topic: string,
-  tags: string[] = [],
-  tagsToAvoid: string[] = [],
-) => {
+type ScrappingData = {
+  topic: string;
+  tags?: string[];
+  tagsToAvoid?: string[];
+};
+
+export const scrappingData = async ({
+  topic,
+  tags = [],
+  tagsToAvoid = [],
+}: ScrappingData) => {
   let query = topic;
 
   if (tags.length > 0) {
