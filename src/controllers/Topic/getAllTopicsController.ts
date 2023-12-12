@@ -3,7 +3,7 @@ import { getAllTopicsRepo } from "../../repositories/Topic/getAllTopicsRepo";
 
 export const getAllTopicsController = async (req: Request, res: Response) => {
   try {
-    const topics = await getAllTopicsRepo(req.email?.email);
+    const topics = await getAllTopicsRepo(req.user?.email);
 
     if (!topics) {
       return res.status(404).send("Not found Topics");

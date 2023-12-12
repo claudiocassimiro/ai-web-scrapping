@@ -23,8 +23,35 @@ model Topics {
   inlineImages     InlineImages[]
   moreInfo         MoreInfo[]
   document         Document[]
+  report           Reports[]
   user             User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId           String
+}
+
+model ScheduledTopics {
+  id              String        @id @default(cuid())
+  topic           String
+  tags            String?
+  tagsToAvoid     String?
+  typeOfReport    String?
+  email           String?
+  scheduledReport ScheduledReports[]    
+}
+
+model Reports {
+  id            String          @id @default(cuid())
+  content       String
+  topic         Topics          @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  topicId       String
+  vector        Unsupported("vector")?
+}
+
+model ScheduledReports {
+  id                String                  @id @default(cuid())
+  content           String
+  scheduledTopic    ScheduledTopics         @relation(fields: [scheduledTopicId], references: [id], onDelete: Cascade)
+  scheduledTopicId  String
+  vector            Unsupported("vector")?
 }
 
 model Document {

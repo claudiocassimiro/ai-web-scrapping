@@ -8,6 +8,7 @@ import {
 } from "langchain/chat_models/openai";
 import { OpenAIEmbeddings } from "langchain/embeddings/openai";
 import { prepareAiResponse } from "../../utils/aiTools/prepareAiResponse";
+import { ChainValues } from "langchain/dist/schema";
 
 export const searchContextRepo = async (
   llm: ChatOpenAI<ChatOpenAICallOptions>,
@@ -42,7 +43,9 @@ export const searchContextRepo = async (
   });
 
   if (context?.length === 0) {
-    return "Desculpe, mas não tenho informações sobre esse assunto";
+    return {
+      text: "Desculpe, mas não tenho informações sobre esse assunto",
+    } as ChainValues;
   }
 
   const message = await prepareAiResponse(llm, question, typeOfReport, context);

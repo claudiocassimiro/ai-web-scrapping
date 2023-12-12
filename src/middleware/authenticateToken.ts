@@ -14,7 +14,7 @@ export const authenticateToken = (
 
   verify(token, process.env.ACCESS_TOKEN_SECRET || "", (err, email: any) => {
     if (err) return res.sendStatus(403);
-    req.email = email;
+    req.user = email;
     return next();
   });
 };
