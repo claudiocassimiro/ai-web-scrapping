@@ -7,8 +7,14 @@ import {
 import handlerTopicService from "../../services/topicService/handlerTopicService";
 
 export const searchTopicController = async (req: Request, res: Response) => {
-  const { topic, tags, tagsToAvoid, typeOfSearch, typeOfReport } =
-    req.body as TopicType;
+  const {
+    topic,
+    tags,
+    tagsToAvoid,
+    typeOfSearch,
+    typeOfReport,
+    periodOfSearch,
+  } = req.body as TopicType;
 
   const dataIsValid = topicSchemaValidation({
     topic,
@@ -16,23 +22,25 @@ export const searchTopicController = async (req: Request, res: Response) => {
     tagsToAvoid,
     typeOfSearch,
     typeOfReport,
+    periodOfSearch,
   });
 
-  if (!dataIsValid) {
+  if (!dataIsValid.success) {
     throw new GenericErrorHandler(
-      "The topic should not be empty",
+      dataIsValid.error.errors.map((err) => err.message).join(", "),
       400,
       "Bad Request",
     );
   }
 
   const message = await handlerTopicService({
-    email: req.email?.email,
+    email: req.user?.email,
     topic,
     tags,
     tagsToAvoid,
     typeOfSearch,
     typeOfReport,
+    periodOfSearch,
   });
 
   return res.status(200).json({ message });
