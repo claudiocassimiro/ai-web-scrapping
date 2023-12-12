@@ -13,11 +13,17 @@ import { ChatPromptTemplate } from "langchain/prompts";
 import { LLMChain } from "langchain/chains";
 import { GenericErrorHandler } from "../../utils/errors/GenericErrorHandler";
 
-export const storeDataRepo = async (
-  splitedDocs: Document<Record<string, any>>[],
-  topic: string,
-  email: string,
-) => {
+type StoreDataRepo = {
+  splitedDocs: Document<Record<string, any>>[];
+  topic: string;
+  email: string;
+};
+
+export const storeDataRepo = async ({
+  splitedDocs,
+  topic,
+  email,
+}: StoreDataRepo) => {
   try {
     const llm = initializeChatOpenAI();
 
